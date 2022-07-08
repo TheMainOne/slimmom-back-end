@@ -1,3 +1,17 @@
-const validation = () => {};
+const validation = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+      error.status = 400;
+      if (!req._body) {
+        error.message = "missing fields";
+      }
+
+      next(error);
+    }
+    next();
+  };
+};
 
 module.exports = validation;
