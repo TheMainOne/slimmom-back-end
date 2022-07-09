@@ -21,6 +21,10 @@ const userSchema = Schema(
       minlength: 3,
       maxlength: 254,
     },
+    token: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -33,7 +37,7 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-const joiSchema = Joi.object({
+const joiRegisterSchema = Joi.object({
   password: Joi.string()
     .regex(/^[a-zA-Z0-9]{8,100}$/)
     .required(),
@@ -53,6 +57,21 @@ const joiSchema = Joi.object({
   }),
 });
 
+const joiLoginSchema = Joi.object({
+  password: Joi.string()
+    .regex(/^[a-zA-Z0-9]{8,100}$/)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .min(3)
+    .max(254)
+    .required()
+    .messages({
+      "string.email": "email should be a type of 'email'",
+      "string.empty": "email cannot be an empty field",
+    }),
+});
+
 const User = model("user", userSchema);
 
-module.exports = { User, joiSchema };
+module.exports = { User, joiRegisterSchema, joiLoginSchema };
