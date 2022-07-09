@@ -58,13 +58,9 @@ const joiRegisterSchema = Joi.object({
 });
 
 const joiLoginSchema = Joi.object({
-  password: Joi.string()
-    .regex(/^[a-zA-Z0-9]{8,100}$/)
-    .required(),
+  password: Joi.string().alphanum().required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .min(3)
-    .max(254)
     .required()
     .messages({
       "string.email": "email should be a type of 'email'",
