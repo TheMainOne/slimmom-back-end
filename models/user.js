@@ -32,7 +32,7 @@ const userSchema = Schema(
       desiredWeight: { type: Number, required: true, default: 0 },
       bloodType: { type: Number, enum: [1, 2, 3, 4], default: 1 },
       dailyRate: { type: Number, required: true, default: 0 },
-      notAllowedProducts: { type: Array },
+      bunnedProducts: { type: Array },
     },
   },
   { versionKey: false, timestamps: true }
