@@ -20,6 +20,10 @@
     {
       "name": "Users",
       "description": "User endpoints"
+    },
+    {
+      "name": "Diary",
+      "description": "Diary endpoints"
     }
   ],
 
@@ -133,6 +137,91 @@
           },
           "404": {
             "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/diary": {
+      "post": {
+        "tags": ["Diary"],
+        "summary": "Add product to diary",
+        "parameters": [],
+        "requestBody": {
+          "description": "Product object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Diary"],
+        "summary": "Delete product from diary",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/diary/day": {
+      "post": {
+        "tags": ["Diary"],
+        "summary": "Day info",
+        "parameters": [],
+        "requestBody": {
+          "description": "Day object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DayRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
             "content": {}
           }
         }
@@ -286,13 +375,31 @@
             }
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "Bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      },
+      "ProductRequest": {
+        "required": [],
+        "type": "object",
+        "properties": {}
+      },
+      "ProductResponse": {
+        "type": "object",
+        "properties": {}
+      },
+      "DayRequest": {
+        "required": [],
+        "type": "object",
+        "properties": {}
+      },
+      "DayResponse": {
+        "type": "object",
+        "properties": {}
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
       }
     }
   }
