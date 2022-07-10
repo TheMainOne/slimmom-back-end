@@ -1,0 +1,299 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "SlimMom API",
+    "description": "API documentation  'Slimmom application'",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "https://slimmomproject.herokuapp.com" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "User endpoints"
+    }
+  ],
+
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Login or password is wrong",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Current user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegistrationRequest": {
+        "required": ["name", "email", "password"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Max"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qweqwe22"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "User's data",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Max"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
+            }
+          }
+        }
+      },
+      "LoginRequest": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qweqwe22"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzljZDYwNjYwMzYyMzVhZmEwMjI2YSIsImlhdCI6MTY1NzM5MzQ0OCwiZXhwIjoxNjU3Mzk3MDQ4fQ.aPCI5e_tT6-EmDvxQPxJwJ-S1-lkD2ae6wXcDAtwJL0"
+          },
+          "user": {
+            "type": "object",
+            "description": "User's data",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Max"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
+            }
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "User's info",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Max"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "userData": {
+                "type": "object",
+                "description": "User's data",
+                "properties": {
+                  "currentWeight": {
+                    "type": "number",
+                    "description": "User's current weight",
+                    "example": 70
+                  },
+                  "height": {
+                    "type": "number",
+                    "description": "User's height",
+                    "example": 175
+                  },
+                  "age": {
+                    "type": "number",
+                    "description": "User's age",
+                    "example": 35
+                  },
+                  "desiredWeight": {
+                    "type": "number",
+                    "description": "User's desired weight",
+                    "example": 60
+                  },
+                  "bloodType": {
+                    "type": "number",
+                    "description": "User's blood type",
+                    "example": 1
+                  },
+                  "dayliRate": {
+                    "type": "number",
+                    "description": "Recommended daily intake",
+                    "example": 800
+                  },
+                  "bannedProducts": {
+                    "type": "array",
+                    "description": "Products banned for user",
+                    "example": ["eggs", "milk"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

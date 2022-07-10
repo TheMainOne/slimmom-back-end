@@ -4,8 +4,9 @@ const { User } = require("../../models");
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (user) {
-    throw new Conflict(`Email in use`);
+    throw new Conflict(`Email already exists`);
   }
 
   const newUser = new User({ name, email });

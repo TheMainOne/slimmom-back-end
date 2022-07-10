@@ -5,8 +5,8 @@ const getCurrent = async (req, res) => {
     code: 200,
     data: {
       user: {
-        email,
         name,
+        email,
         userData,
       },
     },
