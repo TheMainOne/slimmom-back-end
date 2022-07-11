@@ -4,7 +4,7 @@ const {
   putPropsToUserNextReq,
 } = require('../../helpers');
 
-const getDailyInfo = async ({ user: { userData } }, res, next) => {
+const privarR = async ({ user: { userData } }, res, next) => {
   const dailyRate = calcDailyNormKkal(userData);
 
   const bunnedProducts = await findProductByBlood({
@@ -17,4 +17,15 @@ const getDailyInfo = async ({ user: { userData } }, res, next) => {
   next();
 };
 
-module.exports = getDailyInfo;
+const publicR = async ({ body: userData }, res) => {
+  const dailyRate = calcDailyNormKkal(userData);
+
+  const bunnedProducts = await findProductByBlood({
+    blood: userData.bloodType,
+    select: 'title calories',
+  });
+
+  return res.json({ status: 200, results: { dailyRate, bunnedProducts } });
+};
+
+module.exports = { privarR, publicR };
