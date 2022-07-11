@@ -1,9 +1,9 @@
 const getCurrent = require('./getCurrent');
-const getDailyInfo = require('./getDailyInfo');
-const saveDailyInfo = require('./saveDailyInfo');
+const getDailyNorma = require('./getDailyNorma');
+const saveDailyNorma = require('./saveDailyNorma');
 
 module.exports = {
   getCurrent,
-  getDailyInfo,
-  saveDailyInfo,
+  getDailyNorma,
+  saveDailyNorma,
 };

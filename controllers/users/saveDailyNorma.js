@@ -1,7 +1,7 @@
 const { User } = require('../../models');
 const { BadRequest } = require('http-errors');
 
-const saveDailyInfo = async ({ user: { _id, userData } }, res, next) => {
+const saveDailyNorma = async ({ user: { _id, userData } }, res, next) => {
   try {
     await User.findByIdAndUpdate(_id, { userData }, { new: true });
   } catch (error) {
@@ -9,4 +9,4 @@ const saveDailyInfo = async ({ user: { _id, userData } }, res, next) => {
   }
 };
 
-module.exports = saveDailyInfo;
+module.exports = saveDailyNorma;

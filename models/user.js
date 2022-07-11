@@ -77,7 +77,7 @@ const joiLoginSchema = Joi.object({
     }),
 });
 
-const joiDailyInfoSchema = Joi.object({
+const joiDailyNormaSchema = Joi.object({
   currentWeight: Joi.number().integer().min(30).max(500).required(),
   height: Joi.number().integer().min(100).max(300).required(),
   age: Joi.number().integer().min(16).max(130).required(),
@@ -91,5 +91,5 @@ module.exports = {
   User,
   joiRegisterSchema,
   joiLoginSchema,
-  joiDailyInfoSchema,
+  joiDailyNormaSchema,
 };

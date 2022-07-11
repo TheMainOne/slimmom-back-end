@@ -2,8 +2,8 @@ const express = require('express');
 
 const { users: ctrl } = require('../../controllers');
 const { auth, ctrlWrapper, validation } = require('../../middlewares');
-const { getDailyInfo, saveDailyInfo } = require('../../controllers/users');
-const { joiDailyInfoSchema: schema } = require('../../models/user');
+const { getDailyNorma, saveDailyNorma } = require('../../controllers/users');
+const { joiDailyNormaSchema: schema } = require('../../models/user');
 const router = express.Router();
 
 router.get('/current', auth, ctrlWrapper(ctrl.getCurrent));
@@ -11,14 +11,14 @@ router.get('/current', auth, ctrlWrapper(ctrl.getCurrent));
 router.get(
   '/daily-norma',
   auth,
-  ctrlWrapper(getDailyInfo.privarR),
-  saveDailyInfo,
+  ctrlWrapper(getDailyNorma.privarR),
+  saveDailyNorma,
 );
 
 router.post(
   '/daily-norma',
   validation(schema),
-  ctrlWrapper(getDailyInfo.publicR),
+  ctrlWrapper(getDailyNorma.publicR),
 );
 
 module.exports = router;
