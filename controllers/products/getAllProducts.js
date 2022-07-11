@@ -2,8 +2,9 @@ const { Product } = require('../../models/product');
 
 const getAllProducts = async (req, res) => {
   const { title } = req.query;
+  const regex = new RegExp(title, 'gi');
   const products = await Product.find({
-    title: { $elemMatch: { ua: title }, $size: 2 },
+    'title.ru': { $regex: regex },
   });
   if (products.length === 0) {
     const error = new Error(`${title} not found`);

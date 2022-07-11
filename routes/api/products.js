@@ -4,6 +4,6 @@ const { auth, ctrlWrapper } = require('../../middlewares');
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(ctrl.getAllProducts));
+router.get('/', auth, ctrlWrapper(ctrl.getAllProducts));
 
 module.exports = router;
