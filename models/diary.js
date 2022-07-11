@@ -2,27 +2,26 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const Joi = require("joi");
 
-const diarySchema = new Schema({
-  consumedProducts: [
-    {
-      title: { type: String, required: true },
-      weight: { type: Number, required: true },
-      kcal: { type: Number, required: true },
+const diarySchema = new Schema(
+  {
+    date: { type: String, required: true },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
-  ],
-  summary: {
-    left: { type: Number, required: true },
-    consumed: { type: Number, required: true },
-    dailyRate: { type: Number, required: true },
-    percentsOfNormal: { type: Number, required: true },
+    title: { type: String, required: true },
+    weight: { type: Number, required: true },
+    kcal: { type: Number, required: true },
   },
-  date: { type: String, required: true },
-});
+  { versionKey: false }
+);
 
 const joiAddProductSchema = Joi.object({
-  date: Joi.date().required(),
-  productId: Joi.string().required(),
+  date: Joi.string().required(),
+  title: Joi.string().required(),
   weight: Joi.number().required(),
+  kcal: Joi.number().required(),
 });
 
 const joiRemoveProductSchema = Joi.object({
