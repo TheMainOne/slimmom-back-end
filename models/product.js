@@ -10,7 +10,6 @@ const productSchema = Schema(
         ua: { type: String },
       },
     },
-
     calories: { type: Number },
     groupBloodNotAllowed: {
       type: Array,
