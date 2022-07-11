@@ -13,7 +13,12 @@ const privarR = async ({ user: { userData } }, res, next) => {
   });
 
   putPropsToUserNextReq(userData, { dailyRate, bunnedProducts });
-  res.json({ status: 200, results: { dailyRate, bunnedProducts } });
+
+  res.json({
+    status: 'success',
+    code: 200,
+    results: { dailyRate, bunnedProducts },
+  });
   next();
 };
 
@@ -25,7 +30,11 @@ const publicR = async ({ body: userData }, res) => {
     select: 'title calories',
   });
 
-  return res.json({ status: 200, results: { dailyRate, bunnedProducts } });
+  return res.json({
+    status: 'success',
+    code: 200,
+    results: { dailyRate, bunnedProducts },
+  });
 };
 
 module.exports = { privarR, publicR };
