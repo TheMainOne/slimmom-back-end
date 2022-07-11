@@ -1,16 +1,20 @@
-const { calcDailyNormKkal } = require('../../helpers');
-// const { Product } = require('../../models');
+const {
+  calcDailyNormKkal,
+  findProductByBlood,
+  putPropsToUserNextReq,
+} = require('../../helpers');
 
-const getDailyInfo = ({ user }, res, next) => {
-  console.log(user.userData.bloodType);
+const getDailyInfo = async ({ user: { userData } }, res, next) => {
+  const dailyRate = calcDailyNormKkal(userData);
 
-  // const product =
+  const bunnedProducts = await findProductByBlood({
+    blood: userData.bloodType,
+    select: 'title calories',
+  });
 
-  //   Product.findOne({ groupBloodNotAllowed:  });
-
-  const dailyKkal = calcDailyNormKkal(user.userData);
-
-  return res.json({ dailyKkal });
+  putPropsToUserNextReq(userData, { dailyRate, bunnedProducts });
+  res.json({ status: 200, results: { dailyRate, bunnedProducts } });
+  next();
 };
 
 module.exports = getDailyInfo;
