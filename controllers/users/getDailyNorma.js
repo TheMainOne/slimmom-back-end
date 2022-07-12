@@ -1,17 +1,12 @@
 const {
   calcDailyNormKkal,
-  findProductByBlood,
   putPropsToUserNextReq,
+  componentBunnedProduct,
 } = require('../../helpers');
 
 const privarR = async ({ user: { userData } }, res, next) => {
   const dailyRate = calcDailyNormKkal(userData);
-
-  const bannedProducts = await findProductByBlood({
-    blood: userData.bloodType,
-    select: 'title categories',
-  });
-
+  const bannedProducts = await componentBunnedProduct(userData.bloodType);
   putPropsToUserNextReq(userData, { dailyRate, bannedProducts });
 
   res.json({
@@ -24,11 +19,7 @@ const privarR = async ({ user: { userData } }, res, next) => {
 
 const publicR = async ({ body: userData }, res) => {
   const dailyRate = calcDailyNormKkal(userData);
-
-  const bannedProducts = await findProductByBlood({
-    blood: userData.bloodType,
-    select: 'title categories',
-  });
+  const bannedProducts = await componentBunnedProduct(userData.bloodType);
 
   return res.json({
     status: 'success',
