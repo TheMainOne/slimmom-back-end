@@ -1,22 +1,25 @@
 const { Product } = require('../../models/product');
 
-const getAllProducts = async (req, res) => {
-  const { title } = req.query;
-  const regex = new RegExp(title, 'gi');
-  const products = await Product.find({
-    'title.ru': { $regex: regex },
-  });
+const getAllProducts = async ({ query: { title, limit = 10 } }, res) => {
+  const searchQuerry = new RegExp(title, 'i');
+
+  const products = await Product.find()
+    .or(
+      { 'title.ru': { $regex: searchQuerry } },
+      { 'title.ua': { $regex: searchQuerry } }
+    )
+    .limit(limit);
+
   if (products.length === 0) {
     const error = new Error(`${title} not found`);
     error.status = 404;
     throw error;
   }
-  const firstProducts = products.slice(0, 10);
-  console.log(products);
+
   res.json({
     status: 'success',
     code: 200,
-    data: firstProducts,
+    data: products,
   });
 };
 
