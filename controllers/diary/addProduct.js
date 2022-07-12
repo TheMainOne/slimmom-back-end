@@ -8,6 +8,7 @@ const addProduct = async (req, res) => {
     date,
     product: { _id, weight },
   } = req.body;
+
   const product = await findProductById(_id);
   const { _id: productId, title, calories } = product;
 
@@ -23,10 +24,11 @@ const addProduct = async (req, res) => {
     kcal: calculatedCalories,
   };
 
-  const dayInfo = {
+  const dateInfo = {
+    owner: userId,
     date: formatedDate,
     consumedProducts: [newProduct],
-    owner: userId,
+    total: calculatedCalories,
   };
 
   const checkDate = await Diary.findOne({
@@ -35,9 +37,19 @@ const addProduct = async (req, res) => {
 
   if (checkDate) {
     checkDate.consumedProducts.push(newProduct);
-    return await checkDate.save();
+    checkDate.total += calculatedCalories;
+    await checkDate.save();
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: {
+        ...newProduct,
+      },
+    });
+    return;
   }
-  await Diary.create(dayInfo);
+
+  await Diary.create(dateInfo);
   res.status(201).json({
     status: "success",
     code: 201,
