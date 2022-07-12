@@ -9,7 +9,7 @@ const privarR = async ({ user: { userData } }, res, next) => {
 
   const bannedProducts = await findProductByBlood({
     blood: userData.bloodType,
-    select: 'title calories',
+    select: 'title categories',
   });
 
   putPropsToUserNextReq(userData, { dailyRate, bannedProducts });
