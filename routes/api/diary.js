@@ -13,6 +13,7 @@ router.post(
   ctrlWrapper(ctrl.addProduct)
 );
 
-router.delete("/:productId", ctrlWrapper(ctrl.removeProduct));
+router.delete("/:productId", auth, ctrlWrapper(ctrl.removeProduct));
+router.get("/:date", auth, ctrlWrapper(ctrl.getInfoPerDate));
 
 module.exports = router;
