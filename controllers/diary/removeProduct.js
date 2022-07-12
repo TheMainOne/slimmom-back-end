@@ -4,22 +4,34 @@ const { Diary } = require("../../models");
 
 const removeProduct = async (req, res) => {
   const { _id: userId } = req.user;
-  const { _id: productId, date } = req.params;
+  const { _id: productId, date } = req.query;
 
   const formatedDate = dayjs(date).format("DD-MM-YYYY");
-
-  const result = await Diary.findOne({
+  const selectedDate = await Diary.findOne({
     $and: [{ date: formatedDate }, { owner: userId }],
   });
-  // const result = await Diary.findByIdAndRemove({
-  //   $and: [{ date: formatedDate }, { owner: userId }, { _id: productId }],
-  // });
-  console.log(result);
-  if (!result) {
+
+  const product = selectedDate.consumedProducts.find(
+    (product) => product._id === productId
+  );
+
+  if (!selectedDate || !product) {
     throw new NotFound(`Not found`);
   }
+
+  const total = selectedDate.total - product.kcal;
+  await Diary.findByIdAndUpdate(selectedDate._id, {
+    $pull: { consumedProducts: { _id: productId } },
+    $set: { total: total },
+  });
+
   res.json({
-    message: "Product deleted",
+    message: `Product was deleted`,
+    status: "success",
+    code: 200,
+    data: {
+      product,
+    },
   });
 };
 
