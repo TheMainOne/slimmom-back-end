@@ -7,17 +7,17 @@ const {
 const privarR = async ({ user: { userData } }, res, next) => {
   const dailyRate = calcDailyNormKkal(userData);
 
-  const bunnedProducts = await findProductByBlood({
+  const bannedProducts = await findProductByBlood({
     blood: userData.bloodType,
     select: 'title calories',
   });
 
-  putPropsToUserNextReq(userData, { dailyRate, bunnedProducts });
+  putPropsToUserNextReq(userData, { dailyRate, bannedProducts });
 
   res.json({
     status: 'success',
     code: 200,
-    results: { dailyRate, bunnedProducts },
+    results: { dailyRate, bannedProducts },
   });
   next();
 };
@@ -25,7 +25,7 @@ const privarR = async ({ user: { userData } }, res, next) => {
 const publicR = async ({ body: userData }, res) => {
   const dailyRate = calcDailyNormKkal(userData);
 
-  const bunnedProducts = await findProductByBlood({
+  const bannedProducts = await findProductByBlood({
     blood: userData.bloodType,
     select: 'title calories',
   });
@@ -33,7 +33,7 @@ const publicR = async ({ body: userData }, res) => {
   return res.json({
     status: 'success',
     code: 200,
-    results: { dailyRate, bunnedProducts },
+    results: { dailyRate, bannedProducts },
   });
 };
 
