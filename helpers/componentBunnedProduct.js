@@ -15,13 +15,13 @@ const componentBunnedProduct = async blood => {
       const newProduct = { title, _id };
 
       if (prevObj[categories]) {
-        prevObj[categories].product.push(newProduct);
+        prevObj[categories].products.push(newProduct);
         prevObj[categories].total += 1;
       }
 
       if (!prevObj[categories]) {
         prevObj[categories] = {
-          product: [{ title, _id }],
+          products: [{ title, _id }],
           total: 1,
           totalInBase: reportOfAllBase[categories],
         };
