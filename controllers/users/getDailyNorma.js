@@ -27,7 +27,7 @@ const publicR = async ({ body: userData }, res) => {
 
   const bannedProducts = await findProductByBlood({
     blood: userData.bloodType,
-    select: 'title calories',
+    select: 'title categories',
   });
 
   return res.json({
