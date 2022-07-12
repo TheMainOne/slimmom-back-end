@@ -8,9 +8,7 @@ const addProduct = async (req, res) => {
     date,
     product: { _id, weight },
   } = req.body;
-  console.log(_id);
   const product = await findProductById(_id);
-  console.log(product);
   const { _id: productId, title, calories } = product;
 
   const calculatedCalories = calories * (weight / 100);
