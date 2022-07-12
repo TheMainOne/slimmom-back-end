@@ -15,9 +15,9 @@ const productSchema = Schema(
       type: Array,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
 const Product = model('product', productSchema);
 
-module.exports = { Product};
+module.exports = { Product };
