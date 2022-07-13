@@ -10,9 +10,7 @@ const calcDailyNormKkal = ({ currentWeight, height, age, desiredWeight }) => {
     161 -
     10 * (currentWeight - desiredWeight);
 
-  console.log('~ formula', formula);
-
-  return formula;
+  return Math.round(formula);
 };
 
 module.exports = calcDailyNormKkal;
