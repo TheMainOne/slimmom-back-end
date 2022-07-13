@@ -68,6 +68,15 @@ const joiRegisterSchema = Joi.object({
     "string.empty": "name cannot be an empty field",
     "any.required": "missing required name field",
   }),
+  userData: Joi.object({
+    currentWeight: Joi.number().integer(),
+    height: Joi.number().integer(),
+    age: Joi.number().integer(),
+    desiredWeight: Joi.number().integer(),
+    bloodType: Joi.number().valid(1, 2, 3, 4),
+    dailyRate: Joi.number().integer(),
+    bannedProducts: Joi.array(),
+  }),
 });
 
 const joiLoginSchema = Joi.object({

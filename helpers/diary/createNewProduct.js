@@ -1,5 +1,5 @@
 const createNewProduct = (productId, title, weight, calories) => {
-  const calculatedCalories = calories * (weight / 100);
+  const calculatedCalories = Math.round(calories * (weight / 100));
 
   const product = {
     _id: productId,

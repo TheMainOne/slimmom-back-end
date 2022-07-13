@@ -29,7 +29,7 @@ const diarySchema = new Schema(
       ],
       default: [],
     },
-    total: { type: Number },
+    total: { type: Number, default: 0 },
   },
   { versionKey: false }
 );
