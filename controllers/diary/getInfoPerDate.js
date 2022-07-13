@@ -1,25 +1,21 @@
-const dayjs = require("dayjs");
-const { Diary } = require("../../models");
-const { NotFound } = require("http-errors");
+const {
+  diary: { findProductByDateAndUser, createNewDate },
+} = require("../../services");
 
 const getInfoPerDate = async (req, res) => {
-  const { _id: userId } = req.user;
-  const { date } = req.params;
+  const { _id } = req.user;
+  const { date } = req.query;
 
-  const formatedDate = dayjs(date).format("DD-MM-YYYY");
-  const result = await Diary.findOne({
-    $and: [{ date: formatedDate }, { owner: userId }],
-  });
-
+  let result = await findProductByDateAndUser(date, _id);
   if (!result) {
-    throw new NotFound(`Not found`);
+    result = await createNewDate(_id, date);
   }
 
   res.json({
     status: "success",
     code: 200,
     data: {
-      result,
+      ...result._doc,
     },
   });
 };
