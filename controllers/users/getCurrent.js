@@ -8,6 +8,7 @@ const getCurrent = async (req, res) => {
       user: {
         name,
         email,
+        token,
         userData,
       },
     },
