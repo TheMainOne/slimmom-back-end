@@ -4,33 +4,39 @@ const Joi = require("joi");
 
 const diarySchema = new Schema(
   {
-    date: { type: String, required: true },
+    date: { type: String, default: Date.now() },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
-    title: { type: String, required: true },
-    weight: { type: Number, required: true },
-    kcal: { type: Number, required: true },
+    consumedProducts: {
+      type: [
+        {
+          _id: { type: String, required: true },
+          title: {
+            type: Object,
+            ua: {
+              type: String,
+            },
+            ru: {
+              type: String,
+            },
+          },
+          weight: { type: Number, required: true },
+          kcal: { type: Number, required: true },
+        },
+      ],
+      default: [],
+    },
+    total: { type: Number },
   },
   { versionKey: false }
 );
 
 const joiAddProductSchema = Joi.object({
-  date: Joi.string().required(),
-  title: Joi.string().required(),
+  id: Joi.string().required(),
   weight: Joi.number().required(),
-  kcal: Joi.number().required(),
-});
-
-const joiRemoveProductSchema = Joi.object({
-  dayId: Joi.string().required(),
-  productId: Joi.string().required(),
-});
-
-const joiDayInfoSchema = Joi.object({
-  date: Joi.date().required(),
 });
 
 const Diary = model("diary", diarySchema);
@@ -38,6 +44,4 @@ const Diary = model("diary", diarySchema);
 module.exports = {
   Diary,
   joiAddProductSchema,
-  joiRemoveProductSchema,
-  joiDayInfoSchema,
 };

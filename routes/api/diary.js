@@ -6,6 +6,7 @@ const { joiAddProductSchema } = require("../../models/diary");
 
 const router = express.Router();
 
+router.get("/", auth, ctrlWrapper(ctrl.getInfoPerDate));
 router.post(
   "/",
   auth,
@@ -13,6 +14,6 @@ router.post(
   ctrlWrapper(ctrl.addProduct)
 );
 
-router.delete("/:productId", ctrlWrapper(ctrl.removeProduct));
+router.delete("/", auth, ctrlWrapper(ctrl.removeProduct));
 
 module.exports = router;
