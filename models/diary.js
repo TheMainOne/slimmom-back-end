@@ -35,7 +35,7 @@ const diarySchema = new Schema(
 );
 
 const joiAddProductSchema = Joi.object({
-  _id: Joi.string().required(),
+  id: Joi.string().required(),
   weight: Joi.number().required(),
 });
 

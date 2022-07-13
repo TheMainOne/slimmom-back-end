@@ -8,9 +8,9 @@ const {
 const addProduct = async (req, res) => {
   const { _id: userId } = req.user;
   const { date } = req.query;
-  const { _id, weight } = req.body;
+  const { id, weight } = req.body;
 
-  const product = await findProductById(_id);
+  const product = await findProductById(id);
   const { _id: productId, title, calories } = product;
 
   const newProduct = await createNewProduct(productId, title, weight, calories);
