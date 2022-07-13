@@ -3,7 +3,7 @@ const findProductByBlood = require("./findProductByBlood");
 const putPropsToUserNextReq = require("./putPropsToUserNextReq");
 const reportProductByCategories = require("./reportProductByCategories");
 const componentBunnedProduct = require("./componentBunnedProduct");
-const findProductById = require("./findProductById");
+const diary = require("./diary");
 
 module.exports = {
   calcDailyNormKkal,
@@ -11,5 +11,5 @@ module.exports = {
   putPropsToUserNextReq,
   reportProductByCategories,
   componentBunnedProduct,
-  findProductById,
+  diary,
 };

@@ -35,27 +35,13 @@ const diarySchema = new Schema(
 );
 
 const joiAddProductSchema = Joi.object({
-  date: Joi.date().required(),
-  product: Joi.object({
-    _id: Joi.string().required(),
-    weight: Joi.number().required(),
-  }).required(),
+  _id: Joi.string().required(),
+  weight: Joi.number().required(),
 });
-
-// const joiRemoveProductSchema = Joi.object({
-//   dayId: Joi.string().required(),
-//   productId: Joi.string().required(),
-// });
-
-// const joiDayInfoSchema = Joi.object({
-//   date: Joi.date().required(),
-// });
 
 const Diary = model("diary", diarySchema);
 
 module.exports = {
   Diary,
   joiAddProductSchema,
-  // joiRemoveProductSchema,
-  // joiDayInfoSchema,
 };
