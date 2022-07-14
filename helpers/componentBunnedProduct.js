@@ -8,23 +8,20 @@ const componentBunnedProduct = async blood => {
     select: 'title categories',
   });
 
-  const result = products.reduce(
-    (resObj, food) => {
-      const { categories: prevObj } = resObj;
-      const { categories, title, _id } = food;
-      const newProduct = { title, _id };
+  if (!products) return null;
 
-      if (prevObj[categories]) {
-        prevObj[categories].products.push(newProduct);
-        prevObj[categories].total += 1;
+  const result = products.reduce(
+    (resObj, { categories, title, _id }) => {
+      const keyOfCategory = resObj.categories[categories];
+      const newProduct = { title, _id };
+      const totalInBase = reportOfAllBase[categories];
+
+      if (keyOfCategory) {
+        add(keyOfCategory, newProduct);
       }
 
-      if (!prevObj[categories]) {
-        prevObj[categories] = {
-          products: [{ title, _id }],
-          total: 1,
-          totalInBase: reportOfAllBase[categories],
-        };
+      if (!keyOfCategory) {
+        create(keyOfCategory, newProduct, totalInBase);
       }
 
       return resObj;
@@ -35,5 +32,18 @@ const componentBunnedProduct = async blood => {
   result.total = products.length;
   return result;
 };
+
+function add(key, newProduct) {
+  key.products?.push(newProduct);
+  key.total += 1;
+}
+
+function create(key, newProduct, totalInBase) {
+  key = {
+    products: [newProduct],
+    total: 1,
+    totalInBase,
+  };
+}
 
 module.exports = componentBunnedProduct;
