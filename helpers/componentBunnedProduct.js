@@ -12,38 +12,31 @@ const componentBunnedProduct = async blood => {
 
   const result = products.reduce(
     (resObj, { categories, title, _id }) => {
-      const keyOfCategory = resObj.categories[categories];
+      const keyOfCategory = resObj.categories;
       const newProduct = { title, _id };
       const totalInBase = reportOfAllBase[categories];
 
-      if (keyOfCategory) {
-        add(keyOfCategory, newProduct);
+      if (keyOfCategory[categories]) {
+        keyOfCategory[categories].products?.push(newProduct);
+        keyOfCategory[categories].total += 1;
       }
 
-      if (!keyOfCategory) {
-        create(keyOfCategory, newProduct, totalInBase);
+      if (!keyOfCategory[categories]) {
+        keyOfCategory[categories] = {
+          products: [newProduct],
+          total: 1,
+          totalInBase,
+        };
       }
 
       return resObj;
     },
+
     { categories: {} },
   );
 
   result.total = products.length;
   return result;
 };
-
-function add(key, newProduct) {
-  key.products?.push(newProduct);
-  key.total += 1;
-}
-
-function create(key, newProduct, totalInBase) {
-  key = {
-    products: [newProduct],
-    total: 1,
-    totalInBase,
-  };
-}
 
 module.exports = componentBunnedProduct;
