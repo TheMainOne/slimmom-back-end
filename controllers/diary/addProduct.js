@@ -13,12 +13,23 @@ const addProduct = async (req, res) => {
   const product = await findProductById(id);
   const { _id: productId, title, calories } = product;
 
-  const newProduct = await createNewProduct(productId, title, weight, calories);
+  const newProduct = createNewProduct(productId, title, weight, calories);
   const checkDate = await findProductByDateAndUser(date, userId);
 
   if (checkDate) {
-    checkDate.consumedProducts.push(newProduct);
-    checkDate.total += newProduct.kcal;
+    const checkedProduct = checkDate.consumedProducts.find(
+      (product) => product._id === id
+    );
+
+    if (!checkedProduct) {
+      checkDate.consumedProducts.push(newProduct);
+      checkDate.total += newProduct.kcal;
+    } else {
+      checkedProduct.weight += weight;
+      checkedProduct.kcal += Math.round(calories * (weight / 100));
+      checkDate.total += newProduct.kcal;
+    }
+
     await checkDate.save();
   }
 
