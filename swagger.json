@@ -15,15 +15,19 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Authorization endpoints"
+      "description": "Authorization endpoints: Signup, Login, Logout"
     },
     {
       "name": "Users",
-      "description": "User endpoints"
+      "description": "User endpoints: Get current user, Get daily norma, Post daily norma"
     },
     {
       "name": "Diary",
-      "description": "Diary endpoints"
+      "description": "Diary endpoints: Add and Delete product, Get information per date"
+    },
+    {
+      "name": "Products",
+      "description": "Product search endpoints: Product search in the directory"
     }
   ],
 
@@ -100,6 +104,10 @@
           "401": {
             "description": "Login or password is wrong",
             "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
           }
         }
       }
@@ -113,6 +121,10 @@
         "responses": {
           "204": {
             "description": "Success",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
             "content": {}
           }
         }
@@ -135,20 +147,113 @@
               }
             }
           },
-          "404": {
-            "description": "User not found",
+          "401": {
+            "description": "Not authorized",
             "content": {}
           }
         }
       }
     },
-    "/api/diary": {
+    "/api/users/daily-norma": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Calculate user daily norm",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyNormResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      },
       "post": {
-        "tags": ["Diary"],
-        "summary": "Add product to diary",
+        "tags": ["Users"],
+        "summary": "Calculate user daily norm",
         "parameters": [],
         "requestBody": {
-          "description": "Product object",
+          "description": "User data object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyNormRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyNormResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/diary": {
+      "get": {
+        "tags": ["Diary"],
+        "summary": "Info per date",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "description": "Calendar date. Format YYYY-MM-DD"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Diary"],
+        "summary": "Post product to diary",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "description": "Calendar date. Format YYYY-MM-DD"
+          }
+        ],
+        "requestBody": {
+          "description": "Object with product's id and weight of product",
           "required": true,
           "content": {
             "application/json": {
@@ -172,16 +277,35 @@
           "400": {
             "description": "Bad request (invalid request body)",
             "content": {}
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
           }
         }
       },
       "delete": {
         "tags": ["Diary"],
         "summary": "Delete product from diary",
-        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "description": "Calendar date. Format YYYY-MM-DD"
+          },
+          {
+            "in": "query",
+            "name": "productId",
+            "required": true,
+            "description": "Id of product"
+          }
+        ],
         "responses": {
-          "204": {
+          "200": {
             "description": "Success",
+            "message": "Product was delete",
             "content": {
               "application/json": {
                 "schema": {
@@ -189,39 +313,50 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {}
           }
         }
       }
     },
-    "/api/diary/day": {
-      "post": {
-        "tags": ["Diary"],
-        "summary": "Day info",
-        "parameters": [],
-        "requestBody": {
-          "description": "Day object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DayRequest"
-              }
-            }
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Product search in the directory",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "required": true,
+            "description": "Product title"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": true,
+            "description": "Product list limit"
           }
-        },
+        ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Success",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DayResponse"
+                  "$ref": "#/components/schemas/ProductsResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "401": {
+            "description": "Not authorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Product not found",
             "content": {}
           }
         }
@@ -248,6 +383,37 @@
             "type": "string",
             "description": "User's password",
             "example": "qweqwe22"
+          },
+          "userData": {
+            "type": "object",
+            "description": "User's data from calculator",
+            "properties": {
+              "currentWeight": {
+                "type": "number",
+                "description": "User's current weight",
+                "example": 50
+              },
+              "height": {
+                "type": "number",
+                "description": "User's height",
+                "example": 150
+              },
+              "age": {
+                "type": "number",
+                "description": "User's age",
+                "example": 28
+              },
+              "desiredWeight": {
+                "type": "number",
+                "description": "User's desired weight",
+                "example": 50
+              },
+              "bloodType": {
+                "type": "number",
+                "description": "User's blood type",
+                "example": 1
+              }
+            }
           }
         }
       },
@@ -267,6 +433,86 @@
                 "type": "string",
                 "description": "User's email",
                 "format": "email"
+              },
+              "userData": {
+                "type": "object",
+                "description": "User's data from calculator",
+                "properties": {
+                  "currentWeight": {
+                    "type": "number",
+                    "description": "User's current weight",
+                    "example": 50
+                  },
+                  "height": {
+                    "type": "number",
+                    "description": "User's height",
+                    "example": 150
+                  },
+                  "age": {
+                    "type": "number",
+                    "description": "User's age",
+                    "example": 28
+                  },
+                  "desiredWeight": {
+                    "type": "number",
+                    "description": "User's desired weight",
+                    "example": 50
+                  },
+                  "bloodType": {
+                    "type": "number",
+                    "description": "User's blood type",
+                    "example": 1
+                  },
+                  "dailyRate": {
+                    "type": "number",
+                    "description": "User's daily rate",
+                    "example": 2500
+                  },
+                  "bannedProducts": {
+                    "type": "object",
+                    "description": "Banned products object",
+                    "properties": {
+                      "categories": {
+                        "type": "object",
+                        "description": "Product categories",
+                        "properties": {
+                          "яйца": {
+                            "type": "object",
+                            "description": "Product category",
+                            "properties": {
+                              "products": {
+                                "type": "array",
+                                "description": "Array of products",
+                                "example": [
+                                  {
+                                    "title": {
+                                      "_id": "62d1ca1e7223099e3ece947a",
+                                      "ru": "Яйцо куриное (вареное вкрутую)",
+                                      "ua": "Яйце куряче (варене круто)"
+                                    },
+                                    "_id": "5d51694802b2373622ff5539"
+                                  }
+                                ]
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 150
+                              },
+                              "totalInBase": {
+                                "type": "number",
+                                "example": 650
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total": {
+                        "type": "number",
+                        "example": 989
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -309,6 +555,86 @@
                 "type": "string",
                 "description": "User's email",
                 "format": "email"
+              },
+              "userData": {
+                "type": "object",
+                "description": "User's data from calculator",
+                "properties": {
+                  "currentWeight": {
+                    "type": "number",
+                    "description": "User's current weight",
+                    "example": 50
+                  },
+                  "height": {
+                    "type": "number",
+                    "description": "User's height",
+                    "example": 150
+                  },
+                  "age": {
+                    "type": "number",
+                    "description": "User's age",
+                    "example": 28
+                  },
+                  "desiredWeight": {
+                    "type": "number",
+                    "description": "User's desired weight",
+                    "example": 50
+                  },
+                  "bloodType": {
+                    "type": "number",
+                    "description": "User's blood type",
+                    "example": 1
+                  },
+                  "dailyRate": {
+                    "type": "number",
+                    "description": "User's daily rate",
+                    "example": 2500
+                  },
+                  "bannedProducts": {
+                    "type": "object",
+                    "description": "Banned products object",
+                    "properties": {
+                      "categories": {
+                        "type": "object",
+                        "description": "Product categories",
+                        "properties": {
+                          "яйца": {
+                            "type": "object",
+                            "description": "Product category",
+                            "properties": {
+                              "products": {
+                                "type": "array",
+                                "description": "Array of products",
+                                "example": [
+                                  {
+                                    "title": {
+                                      "_id": "62d1ca1e7223099e3ece947a",
+                                      "ru": "Яйцо куриное (вареное вкрутую)",
+                                      "ua": "Яйце куряче (варене круто)"
+                                    },
+                                    "_id": "5d51694802b2373622ff5539"
+                                  }
+                                ]
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 150
+                              },
+                              "totalInBase": {
+                                "type": "number",
+                                "example": 650
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total": {
+                        "type": "number",
+                        "example": 989
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -317,9 +643,14 @@
       "UserResponse": {
         "type": "object",
         "properties": {
+          "token": {
+            "type": "string",
+            "description": "User's token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzljZDYwNjYwMzYyMzVhZmEwMjI2YSIsImlhdCI6MTY1NzM5MzQ0OCwiZXhwIjoxNjU3Mzk3MDQ4fQ.aPCI5e_tT6-EmDvxQPxJwJ-S1-lkD2ae6wXcDAtwJL0"
+          },
           "user": {
             "type": "object",
-            "description": "User's info",
+            "description": "User's data",
             "properties": {
               "name": {
                 "type": "string",
@@ -333,42 +664,81 @@
               },
               "userData": {
                 "type": "object",
-                "description": "User's data",
+                "description": "User's data from calculator",
                 "properties": {
                   "currentWeight": {
                     "type": "number",
                     "description": "User's current weight",
-                    "example": 70
+                    "example": 50
                   },
                   "height": {
                     "type": "number",
                     "description": "User's height",
-                    "example": 175
+                    "example": 150
                   },
                   "age": {
                     "type": "number",
                     "description": "User's age",
-                    "example": 35
+                    "example": 28
                   },
                   "desiredWeight": {
                     "type": "number",
                     "description": "User's desired weight",
-                    "example": 60
+                    "example": 50
                   },
                   "bloodType": {
                     "type": "number",
                     "description": "User's blood type",
                     "example": 1
                   },
-                  "dayliRate": {
+                  "dailyRate": {
                     "type": "number",
-                    "description": "Recommended daily intake",
-                    "example": 800
+                    "description": "User's daily rate",
+                    "example": 2500
                   },
                   "bannedProducts": {
-                    "type": "array",
-                    "description": "Products banned for user",
-                    "example": ["eggs", "milk"]
+                    "type": "object",
+                    "description": "Banned products object",
+                    "properties": {
+                      "categories": {
+                        "type": "object",
+                        "description": "Product categories",
+                        "properties": {
+                          "яйца": {
+                            "type": "object",
+                            "description": "Product category",
+                            "properties": {
+                              "products": {
+                                "type": "array",
+                                "description": "Array of products",
+                                "example": [
+                                  {
+                                    "title": {
+                                      "_id": "62d1ca1e7223099e3ece947a",
+                                      "ru": "Яйцо куриное (вареное вкрутую)",
+                                      "ua": "Яйце куряче (варене круто)"
+                                    },
+                                    "_id": "5d51694802b2373622ff5539"
+                                  }
+                                ]
+                              },
+                              "total": {
+                                "type": "number",
+                                "example": 150
+                              },
+                              "totalInBase": {
+                                "type": "number",
+                                "example": 650
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "total": {
+                        "type": "number",
+                        "example": 989
+                      }
+                    }
                   }
                 }
               }
@@ -376,30 +746,174 @@
           }
         }
       },
-      "ProductRequest": {
-        "required": [],
+      "ProductsResponse": {
+        "type": "array",
+        "description": "Products found",
+        "example": [
+          {
+            "_id": "5d51694802b2373622ff5539",
+            "categories": ["яйца"],
+            "weight": 100,
+            "title": {
+              "_id": "62d1e7b719d951dcd8220d54",
+              "ru": "Яйцо куриное (вареное вкрутую)",
+              "ua": "Яйце куряче (варене круто)"
+            },
+            "calories": 160,
+            "groupBloodNotAllowed": [null, true, false, false, false],
+            "__v": 0
+          }
+        ]
+      },
+      "DateResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "_id": { "type": "string", "example": "62ced642cc7cadaf968ca5fd" },
+          "date": { "type": "string", "example": "2022-07-13" },
+          "owner": { "type": "string", "example": "62cc50b6250e030cb63b5e3e" },
+          "consumedProducts": {
+            "type": "array",
+            "example": [
+              {
+                "_id": "5d51694802b2373622ff55d9",
+                "title": {
+                  "ua": "Полба",
+                  "ru": "Полба"
+                },
+                "weight": 120,
+                "kcal": 404
+              }
+            ]
+          },
+          "total": { "type": "number", "example": 404 }
+        }
+      },
+      "ProductRequest": {
+        "required": ["id", "weight"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5d51694802b2373622ff5530"
+          },
+          "weight": {
+            "type": "number",
+            "example": 50
+          }
+        }
       },
       "ProductResponse": {
         "type": "object",
-        "properties": {}
-      },
-      "DayRequest": {
-        "required": [],
-        "type": "object",
-        "properties": {}
-      },
-      "DayResponse": {
-        "type": "object",
-        "properties": {}
-      },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+        "properties": {
+          "_id": { "type": "string", "example": "5d51694802b2373622ff5530" },
+          "title": {
+            "type": "object",
+            "properties": {
+              "ua": { "type": "string", "example": "Омлет із сиром" },
+              "ru": { "type": "string", "example": "Омлет с сыром" }
+            }
+          },
+          "weight": { "type": "number", "example": 50 },
+          "kcal": { "type": "number", "example": 171 }
         }
+      },
+      "DailyNormRequest": {
+        "required": [
+          "currentWeight",
+          "height",
+          "age",
+          "desiredWeight",
+          "bloodType"
+        ],
+        "type": "object",
+        "properties": {
+          "currentWeight": {
+            "type": "number",
+            "description": "User's current weight",
+            "example": 50
+          },
+          "height": {
+            "type": "number",
+            "description": "User's height",
+            "example": 150
+          },
+          "age": {
+            "type": "number",
+            "description": "User's age",
+            "example": 28
+          },
+          "desiredWeight": {
+            "type": "number",
+            "description": "User's desired weight",
+            "example": 50
+          },
+          "bloodType": {
+            "type": "number",
+            "description": "User's blood type",
+            "example": 1
+          }
+        }
+      },
+      "DailyNormResponse": {
+        "type": "object",
+        "properties": {
+          "dailyRate": {
+            "type": "number",
+            "description": "User's daily rate",
+            "example": 2500
+          },
+          "bannedProducts": {
+            "type": "object",
+            "description": "Banned products object",
+            "properties": {
+              "categories": {
+                "type": "object",
+                "description": "Product categories",
+                "properties": {
+                  "яйца": {
+                    "type": "object",
+                    "description": "Product category",
+                    "properties": {
+                      "products": {
+                        "type": "array",
+                        "description": "Array of products",
+                        "example": [
+                          {
+                            "title": {
+                              "_id": "62d1ca1e7223099e3ece947a",
+                              "ru": "Яйцо куриное (вареное вкрутую)",
+                              "ua": "Яйце куряче (варене круто)"
+                            },
+                            "_id": "5d51694802b2373622ff5539"
+                          }
+                        ]
+                      },
+                      "total": {
+                        "type": "number",
+                        "example": 150
+                      },
+                      "totalInBase": {
+                        "type": "number",
+                        "example": 650
+                      }
+                    }
+                  }
+                }
+              },
+              "total": {
+                "type": "number",
+                "example": 989
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

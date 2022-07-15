@@ -14,6 +14,8 @@ const userSchema = Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      minlength: 3,
+      maxlength: 254,
     },
     name: {
       type: String,
@@ -26,13 +28,13 @@ const userSchema = Schema(
       default: null,
     },
     userData: {
-      currentWeight: { type: Number, required: true, default: 0 },
-      height: { type: Number, required: true, default: 0 },
-      age: { type: Number, required: true, default: 0 },
-      desiredWeight: { type: Number, required: true, default: 0 },
-      bloodType: { type: Number, enum: [1, 2, 3, 4], default: 1 },
-      dailyRate: { type: Number, required: true, default: 0 },
-      bunnedProducts: { type: Array },
+      currentWeight: { type: Number, default: null },
+      height: { type: Number, default: null },
+      age: { type: Number, default: null },
+      desiredWeight: { type: Number, default: null },
+      bloodType: { type: Number, enum: [1, 2, 3, 4], default: null },
+      dailyRate: { type: Number, default: null },
+      bannedProducts: { type: Array, default: null },
     },
   },
   { versionKey: false, timestamps: true }
@@ -49,6 +51,8 @@ userSchema.methods.comparePassword = function (password) {
 const joiRegisterSchema = Joi.object({
   password: Joi.string()
     .regex(/^[a-zA-Z0-9]{8,100}$/)
+    .min(8)
+    .max(100)
     .required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
@@ -64,12 +68,23 @@ const joiRegisterSchema = Joi.object({
     "string.empty": "name cannot be an empty field",
     "any.required": "missing required name field",
   }),
+  userData: Joi.object({
+    currentWeight: Joi.number().integer(),
+    height: Joi.number().integer(),
+    age: Joi.number().integer(),
+    desiredWeight: Joi.number().integer(),
+    bloodType: Joi.number().valid(1, 2, 3, 4),
+    dailyRate: Joi.number().integer(),
+    bannedProducts: Joi.array(),
+  }),
 });
 
 const joiLoginSchema = Joi.object({
-  password: Joi.string().alphanum().required(),
+  password: Joi.string().alphanum().min(8).max(100).required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .min(3)
+    .max(254)
     .required()
     .messages({
       "string.email": "email should be a type of 'email'",
@@ -77,6 +92,19 @@ const joiLoginSchema = Joi.object({
     }),
 });
 
+const joiDailyNormaSchema = Joi.object({
+  currentWeight: Joi.number().integer().min(30).max(500).required(),
+  height: Joi.number().integer().min(100).max(300).required(),
+  age: Joi.number().integer().min(16).max(130).required(),
+  desiredWeight: Joi.number().integer().min(30).max(500).required(),
+  bloodType: Joi.number().valid(1, 2, 3, 4).required(),
+});
+
 const User = model("user", userSchema);
 
-module.exports = { User, joiRegisterSchema, joiLoginSchema };
+module.exports = {
+  User,
+  joiRegisterSchema,
+  joiLoginSchema,
+  joiDailyNormaSchema,
+};
