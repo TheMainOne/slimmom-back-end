@@ -4,9 +4,10 @@ const {
   componentBunnedProduct,
 } = require('../../helpers');
 
-const privarR = async ({ user: { userData } }, res, next) => {
+const privateR = async ({ body: userData }, res, next) => {
   const dailyRate = calcDailyNormKkal(userData);
   const bannedProducts = await componentBunnedProduct(userData.bloodType);
+
   putPropsToUserNextReq(userData, { dailyRate, bannedProducts });
 
   res.json({
@@ -28,4 +29,4 @@ const publicR = async ({ body: userData }, res) => {
   });
 };
 
-module.exports = { privarR, publicR };
+module.exports = { privateR, publicR };
