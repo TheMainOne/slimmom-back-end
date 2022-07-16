@@ -92,7 +92,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
+                  "$ref": "#/components/schemas/UserResponse"
                 }
               }
             }
@@ -154,12 +154,22 @@
         }
       }
     },
-    "/api/users/daily-norma": {
-      "get": {
+    "/api/users/daily-norma/public": {
+      "post": {
         "tags": ["Users"],
-        "summary": "Calculate user daily norm",
+        "summary": "Calculate user daily norm: public",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "User data object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DailyNormRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -170,16 +180,15 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {}
           }
         }
-      },
+      }
+    },
+    "/api/users/daily-norma/private": {
       "post": {
         "tags": ["Users"],
         "summary": "Calculate user daily norm",
+        "security": [{ "Bearer": [] }],
         "parameters": [],
         "requestBody": {
           "description": "User data object",
@@ -336,6 +345,7 @@
           {
             "in": "query",
             "name": "limit",
+            "default": 10,
             "required": true,
             "description": "Product list limit"
           }
@@ -435,84 +445,7 @@
                 "format": "email"
               },
               "userData": {
-                "type": "object",
-                "description": "User's data from calculator",
-                "properties": {
-                  "currentWeight": {
-                    "type": "number",
-                    "description": "User's current weight",
-                    "example": 50
-                  },
-                  "height": {
-                    "type": "number",
-                    "description": "User's height",
-                    "example": 150
-                  },
-                  "age": {
-                    "type": "number",
-                    "description": "User's age",
-                    "example": 28
-                  },
-                  "desiredWeight": {
-                    "type": "number",
-                    "description": "User's desired weight",
-                    "example": 50
-                  },
-                  "bloodType": {
-                    "type": "number",
-                    "description": "User's blood type",
-                    "example": 1
-                  },
-                  "dailyRate": {
-                    "type": "number",
-                    "description": "User's daily rate",
-                    "example": 2500
-                  },
-                  "bannedProducts": {
-                    "type": "object",
-                    "description": "Banned products object",
-                    "properties": {
-                      "categories": {
-                        "type": "object",
-                        "description": "Product categories",
-                        "properties": {
-                          "яйца": {
-                            "type": "object",
-                            "description": "Product category",
-                            "properties": {
-                              "products": {
-                                "type": "array",
-                                "description": "Array of products",
-                                "example": [
-                                  {
-                                    "title": {
-                                      "_id": "62d1ca1e7223099e3ece947a",
-                                      "ru": "Яйцо куриное (вареное вкрутую)",
-                                      "ua": "Яйце куряче (варене круто)"
-                                    },
-                                    "_id": "5d51694802b2373622ff5539"
-                                  }
-                                ]
-                              },
-                              "total": {
-                                "type": "number",
-                                "example": 150
-                              },
-                              "totalInBase": {
-                                "type": "number",
-                                "example": 650
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "total": {
-                        "type": "number",
-                        "example": 989
-                      }
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/UserData"
               }
             }
           }
@@ -531,112 +464,6 @@
             "type": "string",
             "description": "User's password",
             "example": "qweqwe22"
-          }
-        }
-      },
-      "LoginResponse": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "description": "User's token",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYzljZDYwNjYwMzYyMzVhZmEwMjI2YSIsImlhdCI6MTY1NzM5MzQ0OCwiZXhwIjoxNjU3Mzk3MDQ4fQ.aPCI5e_tT6-EmDvxQPxJwJ-S1-lkD2ae6wXcDAtwJL0"
-          },
-          "user": {
-            "type": "object",
-            "description": "User's data",
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "User's name",
-                "example": "Max"
-              },
-              "email": {
-                "type": "string",
-                "description": "User's email",
-                "format": "email"
-              },
-              "userData": {
-                "type": "object",
-                "description": "User's data from calculator",
-                "properties": {
-                  "currentWeight": {
-                    "type": "number",
-                    "description": "User's current weight",
-                    "example": 50
-                  },
-                  "height": {
-                    "type": "number",
-                    "description": "User's height",
-                    "example": 150
-                  },
-                  "age": {
-                    "type": "number",
-                    "description": "User's age",
-                    "example": 28
-                  },
-                  "desiredWeight": {
-                    "type": "number",
-                    "description": "User's desired weight",
-                    "example": 50
-                  },
-                  "bloodType": {
-                    "type": "number",
-                    "description": "User's blood type",
-                    "example": 1
-                  },
-                  "dailyRate": {
-                    "type": "number",
-                    "description": "User's daily rate",
-                    "example": 2500
-                  },
-                  "bannedProducts": {
-                    "type": "object",
-                    "description": "Banned products object",
-                    "properties": {
-                      "categories": {
-                        "type": "object",
-                        "description": "Product categories",
-                        "properties": {
-                          "яйца": {
-                            "type": "object",
-                            "description": "Product category",
-                            "properties": {
-                              "products": {
-                                "type": "array",
-                                "description": "Array of products",
-                                "example": [
-                                  {
-                                    "title": {
-                                      "_id": "62d1ca1e7223099e3ece947a",
-                                      "ru": "Яйцо куриное (вареное вкрутую)",
-                                      "ua": "Яйце куряче (варене круто)"
-                                    },
-                                    "_id": "5d51694802b2373622ff5539"
-                                  }
-                                ]
-                              },
-                              "total": {
-                                "type": "number",
-                                "example": 150
-                              },
-                              "totalInBase": {
-                                "type": "number",
-                                "example": 650
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "total": {
-                        "type": "number",
-                        "example": 989
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       },
@@ -663,84 +490,7 @@
                 "format": "email"
               },
               "userData": {
-                "type": "object",
-                "description": "User's data from calculator",
-                "properties": {
-                  "currentWeight": {
-                    "type": "number",
-                    "description": "User's current weight",
-                    "example": 50
-                  },
-                  "height": {
-                    "type": "number",
-                    "description": "User's height",
-                    "example": 150
-                  },
-                  "age": {
-                    "type": "number",
-                    "description": "User's age",
-                    "example": 28
-                  },
-                  "desiredWeight": {
-                    "type": "number",
-                    "description": "User's desired weight",
-                    "example": 50
-                  },
-                  "bloodType": {
-                    "type": "number",
-                    "description": "User's blood type",
-                    "example": 1
-                  },
-                  "dailyRate": {
-                    "type": "number",
-                    "description": "User's daily rate",
-                    "example": 2500
-                  },
-                  "bannedProducts": {
-                    "type": "object",
-                    "description": "Banned products object",
-                    "properties": {
-                      "categories": {
-                        "type": "object",
-                        "description": "Product categories",
-                        "properties": {
-                          "яйца": {
-                            "type": "object",
-                            "description": "Product category",
-                            "properties": {
-                              "products": {
-                                "type": "array",
-                                "description": "Array of products",
-                                "example": [
-                                  {
-                                    "title": {
-                                      "_id": "62d1ca1e7223099e3ece947a",
-                                      "ru": "Яйцо куриное (вареное вкрутую)",
-                                      "ua": "Яйце куряче (варене круто)"
-                                    },
-                                    "_id": "5d51694802b2373622ff5539"
-                                  }
-                                ]
-                              },
-                              "total": {
-                                "type": "number",
-                                "example": 150
-                              },
-                              "totalInBase": {
-                                "type": "number",
-                                "example": 650
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "total": {
-                        "type": "number",
-                        "example": 989
-                      }
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/UserData"
               }
             }
           }
@@ -749,21 +499,55 @@
       "ProductsResponse": {
         "type": "array",
         "description": "Products found",
-        "example": [
-          {
-            "_id": "5d51694802b2373622ff5539",
-            "categories": ["яйца"],
-            "weight": 100,
-            "title": {
-              "_id": "62d1e7b719d951dcd8220d54",
-              "ru": "Яйцо куриное (вареное вкрутую)",
-              "ua": "Яйце куряче (варене круто)"
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "5d51694802b2373622ff5539"
             },
-            "calories": 160,
-            "groupBloodNotAllowed": [null, true, false, false, false],
-            "__v": 0
+            "categories": {
+              "type": "array",
+              "items": { "type": "string", "example": "яйца" }
+            },
+            "weight": {
+              "type": "number",
+              "example": 100
+            },
+            "title": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "62d1e7b719d951dcd8220d54"
+                },
+                "ru": {
+                  "type": "string",
+                  "example": "Яйцо куриное (вареное вкрутую)"
+                },
+                "ua": {
+                  "type": "string",
+                  "example": "Яйце куряче (варене круто)"
+                }
+              }
+            },
+            "calories": {
+              "type": "number",
+              "example": 160
+            },
+            "groupBloodNotAllowed": {
+              "type": "array",
+              "items": {
+                "oneOf": [{ "type": "null" }, { "type": "boolean" }]
+              },
+              "example": [null, true, false, false, false]
+            },
+            "__v": {
+              "type": "number",
+              "example": 0
+            }
           }
-        ]
+        }
       },
       "DateResponse": {
         "type": "object",
@@ -773,17 +557,24 @@
           "owner": { "type": "string", "example": "62cc50b6250e030cb63b5e3e" },
           "consumedProducts": {
             "type": "array",
-            "example": [
-              {
-                "_id": "5d51694802b2373622ff55d9",
-                "title": {
-                  "ua": "Полба",
-                  "ru": "Полба"
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": "5d51694802b2373622ff55d9"
                 },
-                "weight": 120,
-                "kcal": 404
+                "title": {
+                  "type": "object",
+                  "properties": {
+                    "ua": { "type": "string", "example": "Полба" },
+                    "ru": { "type": "string", "example": "Полба" }
+                  }
+                },
+                "weight": { "type": "number", "example": 120 },
+                "kcal": { "type": "number", "example": 404 }
               }
-            ]
+            }
           },
           "total": { "type": "number", "example": 404 }
         }
@@ -850,6 +641,7 @@
           "bloodType": {
             "type": "number",
             "description": "User's blood type",
+            "enum": [1, 2, 3, 4],
             "example": 1
           }
         }
@@ -863,48 +655,106 @@
             "example": 2500
           },
           "bannedProducts": {
+            "$ref": "#/components/schemas/BannedProducts"
+          }
+        }
+      },
+      "UserData": {
+        "description": "User's data",
+        "type": "object",
+        "properties": {
+          "currentWeight": {
+            "type": "number",
+            "description": "User's current weight",
+            "example": 50
+          },
+          "height": {
+            "type": "number",
+            "description": "User's height",
+            "example": 150
+          },
+          "age": {
+            "type": "number",
+            "description": "User's age",
+            "example": 28
+          },
+          "desiredWeight": {
+            "type": "number",
+            "description": "User's desired weight",
+            "example": 50
+          },
+          "bloodType": {
+            "type": "number",
+            "description": "User's blood type",
+            "example": 1
+          },
+          "dailyRate": {
+            "type": "number",
+            "description": "User's daily rate",
+            "example": 2500
+          },
+          "bannedProducts": {
+            "$ref": "#/components/schemas/BannedProducts"
+          }
+        }
+      },
+      "BannedProducts": {
+        "type": "object",
+        "description": "Banned products object",
+        "properties": {
+          "categories": {
             "type": "object",
-            "description": "Banned products object",
+            "description": "Product categories",
             "properties": {
-              "categories": {
+              "яйца": {
                 "type": "object",
-                "description": "Product categories",
+                "description": "Product category",
                 "properties": {
-                  "яйца": {
-                    "type": "object",
-                    "description": "Product category",
-                    "properties": {
-                      "products": {
-                        "type": "array",
-                        "description": "Array of products",
-                        "example": [
-                          {
-                            "title": {
-                              "_id": "62d1ca1e7223099e3ece947a",
-                              "ru": "Яйцо куриное (вареное вкрутую)",
-                              "ua": "Яйце куряче (варене круто)"
+                  "products": {
+                    "type": "array",
+                    "description": "Array of products",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string",
+                              "example": "62d1ca1e7223099e3ece947a"
                             },
-                            "_id": "5d51694802b2373622ff5539"
+                            "ru": {
+                              "type": "string",
+                              "example": "Яйцо куриное (вареное вкрутую)"
+                            },
+                            "ua": {
+                              "type": "string",
+                              "example": "Яйце куряче (варене круто)"
+                            }
                           }
-                        ]
-                      },
-                      "total": {
-                        "type": "number",
-                        "example": 150
-                      },
-                      "totalInBase": {
-                        "type": "number",
-                        "example": 650
+                        },
+                        "_id": {
+                          "type": "string",
+                          "example": "5d51694802b2373622ff5539"
+                        }
                       }
                     }
+                  },
+                  "total": {
+                    "type": "number",
+                    "example": 150
+                  },
+                  "totalInBase": {
+                    "type": "number",
+                    "example": 650
                   }
                 }
-              },
-              "total": {
-                "type": "number",
-                "example": 989
               }
             }
+          },
+          "total": {
+            "type": "number",
+            "example": 989
           }
         }
       }
