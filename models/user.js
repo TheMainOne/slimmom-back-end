@@ -1,25 +1,25 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
-const bcrypt = require("bcryptjs");
+const { Schema, model } = require('mongoose');
+const Joi = require('joi');
+const bcrypt = require('bcryptjs');
 
 const userSchema = Schema(
   {
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required'],
       minlength: 8,
       maxlength: 100,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
       minlength: 3,
       maxlength: 254,
     },
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, 'Name is required'],
       minlength: 3,
       maxlength: 254,
     },
@@ -37,7 +37,7 @@ const userSchema = Schema(
       bannedProducts: { type: Array, default: null },
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
 userSchema.methods.setPassword = function (password) {
@@ -55,18 +55,18 @@ const joiRegisterSchema = Joi.object({
     .max(100)
     .required(),
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .min(3)
     .max(254)
     .required()
     .messages({
-      "string.email": "email should be a type of 'email'",
-      "string.empty": "email cannot be an empty field",
+      'string.email': "email should be a type of 'email'",
+      'string.empty': 'email cannot be an empty field',
     }),
   name: Joi.string().min(3).max(254).required().messages({
-    "string.base": "name should be a type of 'text'",
-    "string.empty": "name cannot be an empty field",
-    "any.required": "missing required name field",
+    'string.base': "name should be a type of 'text'",
+    'string.empty': 'name cannot be an empty field',
+    'any.required': 'missing required name field',
   }),
   userData: Joi.object({
     currentWeight: Joi.number().integer(),
@@ -82,25 +82,25 @@ const joiRegisterSchema = Joi.object({
 const joiLoginSchema = Joi.object({
   password: Joi.string().alphanum().min(8).max(100).required(),
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .min(3)
     .max(254)
     .required()
     .messages({
-      "string.email": "email should be a type of 'email'",
-      "string.empty": "email cannot be an empty field",
+      'string.email': "email should be a type of 'email'",
+      'string.empty': 'email cannot be an empty field',
     }),
 });
 
 const joiDailyNormaSchema = Joi.object({
-  currentWeight: Joi.number().integer().min(30).max(500).required(),
-  height: Joi.number().integer().min(100).max(300).required(),
-  age: Joi.number().integer().min(16).max(130).required(),
-  desiredWeight: Joi.number().integer().min(30).max(500).required(),
-  bloodType: Joi.number().valid(1, 2, 3, 4).required(),
+  currentWeight: Joi.number().integer().min(30).max(500).allow(null).required(),
+  height: Joi.number().integer().min(100).max(300).allow(null).required(),
+  age: Joi.number().integer().min(16).max(130).allow(null).required(),
+  desiredWeight: Joi.number().integer().min(30).max(500).allow(null).required(),
+  bloodType: Joi.number().valid(1, 2, 3, 4).allow(null).required(),
 });
 
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
 module.exports = {
   User,
