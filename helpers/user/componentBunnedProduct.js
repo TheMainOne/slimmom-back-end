@@ -1,4 +1,4 @@
-const findProductByBlood = require('./findProductByBlood');
+const { findProductByBlood } = require('../../services/user');
 const reportProductByCategories = require('./reportProductByCategories');
 
 const componentBunnedProduct = async blood => {
