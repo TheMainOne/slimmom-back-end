@@ -1,15 +1,10 @@
-const {
-  calcDailyNormKkal,
-  putPropsToUserNextReq,
-  componentBunnedProduct,
-} = require('../../helpers');
+const { calcDailyNormKkal, componentBunnedProduct } = require('../../helpers');
 
-const privateR = async ({ body: userData }, res, next) => {
+const privateR = async (req, res, next) => {
+  const { body: userData } = req;
   const dailyRate = calcDailyNormKkal(userData);
   const bannedProducts = await componentBunnedProduct(userData.bloodType);
-
-  putPropsToUserNextReq(userData, { dailyRate, bannedProducts });
-
+  req.user.userData = { ...userData, dailyRate, bannedProducts };
   res.json({
     status: 'success',
     code: 200,
