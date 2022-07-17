@@ -1,14 +1,14 @@
 const { Product } = require('../../models/product');
 
 const getAllProducts = async ({ query: { title, limit = 10 } }, res) => {
-  const searchQuerry = new RegExp(title, 'i');
+  const titleFromUrl = decodeURI(title).trim();
 
-  const products = await Product.find()
-    .or(
-      { 'title.ru': { $regex: searchQuerry } },
-      { 'title.ua': { $regex: searchQuerry } }
-    )
-    .limit(limit);
+  const products = await Product.find({
+    $or: [
+      { 'title.ua': { $regex: titleFromUrl, $options: 'i' } },
+      { 'title.ru': { $regex: titleFromUrl, $options: 'i' } },
+    ],
+  }).limit(limit);
 
   if (products.length === 0) {
     const error = new Error(`${title} not found`);
