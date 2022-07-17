@@ -1,4 +1,4 @@
-const { calcDailyNormKkal, componentBunnedProduct } = require("../../helpers");
+const { calcDailyNormKkal, componentBunnedProduct } = require('../../helpers');
 
 const privateR = async (req, res, next) => {
   const { body: userData } = req;
@@ -6,7 +6,7 @@ const privateR = async (req, res, next) => {
   const bannedProducts = await componentBunnedProduct(userData.bloodType);
   req.user.userData = { ...userData, dailyRate, bannedProducts };
   res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     results: { dailyRate, bannedProducts },
   });
@@ -18,7 +18,7 @@ const publicR = async ({ body: userData }, res) => {
   const bannedProducts = await componentBunnedProduct(userData.bloodType);
 
   return res.json({
-    status: "success",
+    status: 'success',
     code: 200,
     results: { dailyRate, bannedProducts },
   });
