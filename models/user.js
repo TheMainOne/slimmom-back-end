@@ -93,10 +93,10 @@ const joiLoginSchema = Joi.object({
 });
 
 const joiDailyNormaSchema = Joi.object({
-  currentWeight: Joi.number().integer().min(30).max(500).allow(null).required(),
-  height: Joi.number().integer().min(100).max(300).allow(null).required(),
-  age: Joi.number().integer().min(16).max(130).allow(null).required(),
-  desiredWeight: Joi.number().integer().min(30).max(500).allow(null).required(),
+  currentWeight: Joi.number().integer().min(20).max(500).allow(null).required(),
+  height: Joi.number().integer().min(100).max(250).allow(null).required(),
+  age: Joi.number().integer().min(18).max(100).allow(null).required(),
+  desiredWeight: Joi.number().integer().min(20).max(500).allow(null).required(),
   bloodType: Joi.number().valid(1, 2, 3, 4).allow(null).required(),
 });
 
