@@ -22,6 +22,9 @@ const diarySchema = new Schema(
             ru: {
               type: String,
             },
+            en: {
+              type: String,
+            },
           },
           weight: { type: Number, required: true },
           kcal: { type: Number, required: true },
