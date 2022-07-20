@@ -6,6 +6,7 @@ const createNewProduct = (productId, title, weight, calories) => {
     title: {
       ua: title.ua,
       ru: title.ru,
+      en: title.en,
     },
     weight,
     kcal: calculatedCalories,
