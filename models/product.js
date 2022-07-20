@@ -6,7 +6,6 @@ const productSchema = Schema(
     weight: { type: Number },
     title: {
       type: {
-        ru: { type: String },
         ua: { type: String },
         en: {type: String}
       },
