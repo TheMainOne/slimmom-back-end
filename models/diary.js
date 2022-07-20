@@ -19,9 +19,6 @@ const diarySchema = new Schema(
             ua: {
               type: String,
             },
-            ru: {
-              type: String,
-            },
             en: {
               type: String,
             },

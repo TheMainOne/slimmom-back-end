@@ -5,7 +5,6 @@ const createNewProduct = (productId, title, weight, calories) => {
     _id: productId,
     title: {
       ua: title.ua,
-      ru: title.ru,
       en: title.en,
     },
     weight,

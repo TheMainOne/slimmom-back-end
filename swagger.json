@@ -521,10 +521,6 @@
                   "type": "string",
                   "example": "62d1e7b719d951dcd8220d54"
                 },
-                "ru": {
-                  "type": "string",
-                  "example": "Яйцо куриное (вареное вкрутую)"
-                },
                 "ua": {
                   "type": "string",
                   "example": "Яйце куряче (варене круто)"
@@ -572,7 +568,6 @@
                   "type": "object",
                   "properties": {
                     "ua": { "type": "string", "example": "Полба" },
-                    "ru": { "type": "string", "example": "Полба" },
                     "en": { "type": "string", "example": "Spelt" }
                   }
                 },
@@ -606,7 +601,6 @@
             "type": "object",
             "properties": {
               "ua": { "type": "string", "example": "Омлет із сиром" },
-              "ru": { "type": "string", "example": "Омлет с сыром" },
               "en": { "type": "string", "example": "Omelet with cheese" }
             }
           },
@@ -728,10 +722,6 @@
                             "_id": {
                               "type": "string",
                               "example": "62d1ca1e7223099e3ece947a"
-                            },
-                            "ru": {
-                              "type": "string",
-                              "example": "Яйцо куриное (вареное вкрутую)"
                             },
                             "ua": {
                               "type": "string",
