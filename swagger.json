@@ -528,6 +528,10 @@
                 "ua": {
                   "type": "string",
                   "example": "Яйце куряче (варене круто)"
+                },
+                "en": {
+                  "type": "string",
+                  "example": "Chicken egg (hard boiled)"
                 }
               }
             },
@@ -568,7 +572,8 @@
                   "type": "object",
                   "properties": {
                     "ua": { "type": "string", "example": "Полба" },
-                    "ru": { "type": "string", "example": "Полба" }
+                    "ru": { "type": "string", "example": "Полба" },
+                    "en": { "type": "string", "example": "Spelt" }
                   }
                 },
                 "weight": { "type": "number", "example": 120 },
@@ -601,7 +606,8 @@
             "type": "object",
             "properties": {
               "ua": { "type": "string", "example": "Омлет із сиром" },
-              "ru": { "type": "string", "example": "Омлет с сыром" }
+              "ru": { "type": "string", "example": "Омлет с сыром" },
+              "en": { "type": "string", "example": "Omelet with cheese" }
             }
           },
           "weight": { "type": "number", "example": 50 },
@@ -730,6 +736,10 @@
                             "ua": {
                               "type": "string",
                               "example": "Яйце куряче (варене круто)"
+                            },
+                            "en": {
+                              "type": "string",
+                              "example": "Chicken egg (hard boiled)"
                             }
                           }
                         },
