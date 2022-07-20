@@ -6,7 +6,7 @@ const getAllProducts = async ({ query: { title, limit = 10 } }, res) => {
   const products = await Product.find({
     $or: [
       { 'title.ua': { $regex: titleFromUrl, $options: 'i' } },
-      { 'title.ru': { $regex: titleFromUrl, $options: 'i' } },
+      { 'title.en': { $regex: titleFromUrl, $options: 'i' } },
     ],
   }).limit(limit);
 
